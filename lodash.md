@@ -408,10 +408,13 @@ const purchases = [
 const purchasesByMonth = _.groupBy(purchases, 'month') // Use groupBy to group the purchases by the month that they were made.
 
 // Bonus Points
-function getSum (total, num) {
-  return total + num
-}
-const totalByMonth = purchasesByMonth.reduce(getSum) // Use the grouped purchasesByMonth and reduce to create a totalByMonth object.
+const totalByMonth = _.mapValues(purchasesByMonth, function(month){
+ return (_.reduce(month, function(a, b) {
+   return a+b.price;
+    }, 0))
+    })
+
+ // Use the grouped purchasesByMonth and reduce to create a totalByMonth object.
 
 // memoize
 //  Memoize lets us take a function that takes a lot of time to run, and cache (or memoize)
@@ -504,3 +507,28 @@ let getJedi = // Use Memoize to remember the previous calls made to the server
     //   console.timeEnd('getJedi')
     // });
   }, 2000); -->
+
+var fibonacci = (function() {
+  var memo = {};
+
+  function f(x, n) {
+    var value;
+
+    memo[x] = memo[x] || {};
+
+    if (x in memo && n in memo[x]) {
+      value = memo[x][n];
+    } else {
+      if (n === 0 || n === 1)
+        value = n;
+      else
+        value = f(x, n - 1) + f(x, n - 2);
+
+      memo[x][n] = value;
+    }
+
+    return value;
+  }
+
+  return f;
+})();
